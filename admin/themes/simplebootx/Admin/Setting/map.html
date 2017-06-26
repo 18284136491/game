@@ -1,0 +1,125 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('setting/map')}">{:L('ADMIN_MAP_INDEX')}</a></li>
+		</ul>
+		<form class="form-horizontal js-ajax-form" method="post" action="{:U('setting/map_post')}">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">ak：</label>
+					<div class="controls">
+						<input type="text" placeholder="请输入百度开放平台ak" name="ak" value="{$map_settings.ak}">
+					</div>
+				</div>
+				<div class="control-group">
+                    <label class="control-label">公司名称：</label>
+                    <div class="controls">
+                        <input type="text" placeholder="请输入公司名称" name="title" value="{$map_settings.title}">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">公司地址：</label>
+                    <div class="controls">
+                        <input type="text" placeholder="请输入公司地址" name="address" value="{$map_settings.address}">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">公司电话：</label>
+                    <div class="controls">
+                        <input type="text" placeholder="请输入公司固定电话" name="phone" value="{$map_settings.phone}">
+                    </div>
+                </div>
+                <div class="control-group">
+					<label class="control-label">公司简介：</label>
+					<div class="controls">
+						<!-- <input type="textarea" placeholder="请输入公司简介" name="intro" value="{$map_settings.intro}"> -->
+                        <textarea style="width:60%" rows="4"  placeholder="请输入公司简介" name="intro">{$map_settings.intro}</textarea>
+					</div>
+				</div>
+
+				<div class="control-group">
+						<div id="map" class="map-canvas no-margin" style="width: 80%;height: 400px;margin:0 auto;display: none">
+				</div>
+
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary  js-ajax-submit">{:L('SAVE')}</button>
+				</div>
+			</fieldset>
+		</form>
+<!-- <section id="section-map" class="appear clearfix notransition animated fadeInUpNow animation103">
+    <div id="map" style="width: 80%;height: 400px;margin:0 auto"></div>
+</section> -->
+    </div>
+<!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=TkZmzyqavL5lGsXkgP7MGd2UvdFwA82p"></script> -->
+<!--引用百度地图API-->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=2K7XK7x59AbzjS8E4MaDt8FY"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+<script type="text/javascript">
+	var lng = "{$map_settings.lng}";
+    var lat = "{$map_settings.lat}";
+    var title = "{$map_settings.title}";
+    var phone = "{$map_settings.phone}";
+	var intro = "{$map_settings.intro}";
+	var address = "{$map_settings.address}";
+	if(lng && lat && title && phone && intro && address){
+	// 	// 百度地图API功能
+	// 	var map = new BMap.Map("allmap");
+	// 	map.centerAndZoom(new BMap.Point(116.331398,39.897445),14);
+	// 	map.enableScrollWheelZoom(true);
+	// 	// 用经纬度设置地图中
+	// 	map.clearOverlays(); 
+	// 	var new_point = new BMap.Point(lng,lat);
+	// 	var marker = new BMap.Marker(new_point);  // 创建标注
+	// 	map.addOverlay(marker);              // 将标注添加到地图中
+	// 	map.panTo(new_point);
+	// 	var infoWindow = new BMap.InfoWindow("game<br/><span class=''>地址："+address+"</span>"); // 创建信息窗口对象
+	// 	marker.openInfoWindow(infoWindow);
+    // 百度地图API功能
+
+        $('#map').show();
+        var map = new BMap.Map('map');
+        var poi = new BMap.Point(lng,lat);
+        map.centerAndZoom(poi, 14);
+        map.enableKeyboard();
+        map.enableDragging();
+        map.enableScrollWheelZoom();
+        map.enableDoubleClickZoom();
+        var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+        var content = '<div style="margin:0;line-height:20px;padding:2px;">' +
+            '地址：'+address+'<br/>电话：'+phone+'<br/>'+intro +
+            '</div>';
+        /*map.addControl(top_left_navigation);*/
+        //创建检索信息窗口对象
+        var searchInfoWindow = null;
+        searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
+            title: title,      //标题
+            width: 290,             //宽度
+            height: 150,              //高度
+            panel: "panel",         //检索结果面板
+            enableAutoPan: true,     //自动平移
+            searchTypes: [
+                BMAPLIB_TAB_SEARCH,   //周边检索
+                BMAPLIB_TAB_TO_HERE,  //到这里去
+                BMAPLIB_TAB_FROM_HERE //从这里出发
+            ]
+        });
+        var marker = new BMap.Marker(poi); //创建marker对象
+        marker.enableDragging(); //marker可拖拽
+        marker.addEventListener("click", function () {
+            searchInfoWindow.open(marker);
+        });
+        map.addOverlay(marker); //在地图中添加marker
+	}else{
+		$('#map').hide();
+	}
+
+
+
+
+</script>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>
